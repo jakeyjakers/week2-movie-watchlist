@@ -5,13 +5,13 @@ import Watchlist from './components/Watchlist';
 import axios from 'axios';
 import './App.css';
 
+ const PageContext = createContext()
+
 function App() {
 
   const [movieList, setMovieList] = useState([])
   const [list, setWatchList] = useState([])
   const [page, setPage] = useState(1)
-
-  // const PageContext = createContext()
 
   const getData = () => {
     axios
@@ -34,23 +34,23 @@ function App() {
     const newState = list.filter((item) => {
       return item !== movie
     })
-    setMovieList(newState)
+    setWatchList(newState)
   }
 
   return (
     <div className="App">
       <Header />
       <main>
-        {/* <PageContext.Provider value={[page, setPage]} > */}
+        <PageContext.Provider value={{page, setPage}} >
         <MovieScreen
         addMovie={addMovie}
         list={list}
-        page={page}
-        setPage={setPage}
+        //page={page}
+        //setPage={setPage}
         movieList={movieList}
         removeMovie={removeMovie}
         />
-        {/* </PageContext.Provider> */}
+        </PageContext.Provider>
         <Watchlist list={list} removeMovie={removeMovie} page={page} setPage={setPage}/>
       </main>
     </div>
@@ -58,4 +58,4 @@ function App() {
 }
 
 export default App;
-
+export {PageContext}

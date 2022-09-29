@@ -1,9 +1,10 @@
 import React, {useContext} from "react";
 import MovieCard from "./MovieCard";
+import { PageContext } from "../App";
 
-const MovieScreen = ({movieList, addMovie, removeMovie, list, page, setPage}) => {
+const MovieScreen = ({movieList, addMovie, removeMovie, list}) => {
 
-    // const [page, setPage] = useContext(PageContext)
+     const {page, setPage} = useContext(PageContext)
 
     const movieDisplay = movieList.map((movie, index) => {
         return (
