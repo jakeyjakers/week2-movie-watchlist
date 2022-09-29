@@ -1,25 +1,61 @@
-import logo from './logo.svg';
+import React, { useState, useEffect, createContext } from 'react';
+import Header from './components/Header';
+import MovieScreen from './components/MovieScreen';
+import Watchlist from './components/Watchlist';
+import axios from 'axios';
 import './App.css';
 
 function App() {
+
+  const [movieList, setMovieList] = useState([])
+  const [list, setWatchList] = useState([])
+  const [page, setPage] = useState(1)
+
+  // const PageContext = createContext()
+
+  const getData = () => {
+    axios
+          .get(`https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=${page}`)
+          .then((res) => {
+            console.log(res.data.results)
+            setMovieList(res.data.results)
+          })
+  }
+
+  useEffect(() => {
+    getData()
+  }, [page])
+
+  const addMovie = (movie) => {
+     setWatchList([...list, movie])
+  }
+
+  const removeMovie = (movie) => {
+    const newState = list.filter((item) => {
+      return item !== movie
+    })
+    setMovieList(newState)
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <main>
+        {/* <PageContext.Provider value={[page, setPage]} > */}
+        <MovieScreen
+        addMovie={addMovie}
+        list={list}
+        page={page}
+        setPage={setPage}
+        movieList={movieList}
+        removeMovie={removeMovie}
+        />
+        {/* </PageContext.Provider> */}
+        <Watchlist list={list} removeMovie={removeMovie} page={page} setPage={setPage}/>
+      </main>
     </div>
   );
 }
 
 export default App;
+
